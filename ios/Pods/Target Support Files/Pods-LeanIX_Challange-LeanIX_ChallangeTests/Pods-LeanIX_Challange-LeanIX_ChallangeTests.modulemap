@@ -1,0 +1,6 @@
+module Pods_LeanIX_Challange_LeanIX_ChallangeTests {
+  umbrella header "Pods-LeanIX_Challange-LeanIX_ChallangeTests-umbrella.h"
+
+  export *
+  module * { export * }
+}

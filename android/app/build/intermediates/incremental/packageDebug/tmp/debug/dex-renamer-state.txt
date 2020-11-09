@@ -1,0 +1,4 @@
+#Tue Nov 10 00:53:09 IST 2020
+base.0=C\:\\SSSSSS\\LeanIX_Challange\\android\\app\\build\\intermediates\\dex\\debug\\mergeDexDebug\\out\\classes.dex
+path.0=classes.dex
+renamed.0=classes.dex

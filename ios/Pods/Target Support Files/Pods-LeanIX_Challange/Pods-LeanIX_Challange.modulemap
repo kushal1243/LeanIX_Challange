@@ -1,0 +1,6 @@
+module Pods_LeanIX_Challange {
+  umbrella header "Pods-LeanIX_Challange-umbrella.h"
+
+  export *
+  module * { export * }
+}
