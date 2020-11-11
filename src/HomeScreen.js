@@ -15,39 +15,6 @@ import LaunchListItem from './LaunchListItem';
 import moment from 'moment';
 import { GET_PAST_LAUNCHES } from './GraphQL/getPastLaunches';
 
-export const FETCH_PAST_LAUNCHES = gql`
-  {
-    launchesPast{
-      mission_name
-      launch_date_local
-      links {
-        video_link
-      }
-      rocket {
-        rocket_name
-      }
-      launch_year
-    }
-  }
-`
-
-export const FETCH_UPCOMING_LAUNCHES = gql`
-  {
-    launchesUpcoming{
-      mission_name
-      launch_date_local
-      links {
-        video_link
-      }
-      rocket {
-        rocket_name
-      }
-      launch_year
-    }
-  }
-  `
-
-
 const makeApolloClient = () => {
   const link = new HttpLink({
     uri: 'https://api.spacex.land/graphql/',
@@ -127,22 +94,10 @@ class HomeScreen extends Component {
     })
   }
 
-  fetchUpcomingLaunches = (client) => {
-    client.query({
-      query: FETCH_UPCOMING_LAUNCHES
-    }).then(response => {
-      this.setState({
-        upcomingLaunchData: response.data.launchesUpcoming,
-        upcomingLaunchSearchData: response.data.launchesUpcoming
-      })
-    })
-  }
-
   componentDidMount() {
     const client = makeApolloClient()
     this.setState({ client })
     this.fetchPastLaunches(client)
-    this.fetchUpcomingLaunches(client)
   }
 
   _renderPagination = () => {
@@ -181,7 +136,7 @@ class HomeScreen extends Component {
           />
           {this.state.isRefreshing ?
             <View style={{flex:1,position:'absolute',bottom:0,alignSelf:'center'}}>
-              <ActivityIndicator color='blue' style={{ margin: 15 }} size={30} />
+              <ActivityIndicator color='green' style={{ margin: 15 }} size={30} />
             </View> 
             : null}
         </View>
@@ -190,72 +145,22 @@ class HomeScreen extends Component {
     return (
       <View style={styles.mainContainer}>
         <View style={styles.logoContainer}>
-          <BarIndicator color='blue' />
+          <BarIndicator color='green' />
         </View>
       </View>
     )
   }
 
-  renderUpcomingLaunchesContent() {
-    if (this.state.upcomingLaunchData) {
-      return (
-        <FlatList
-          extraData={this.state.refresh}
-          data={this.state.upcomingLaunchSearchData}
-          showsVerticalScrollIndicator={false}
-          renderItem={({ item }) => <LaunchListItem launchItem={item} navigation={this.props.navigation} />}
-          keyExtractor={item => item.mission_name}
-        />
-      )
-    }
-    return (
-      <View style={styles.mainContainer}>
-        <View style={styles.logoContainer}>
-          <BarIndicator color='blue' />
-        </View>
-      </View>
-    )
-  }
+
 
   renderMainContent() {
-    if (this.state.isStatusPast) {
       return (
         <View>
           {this.renderPastLaunchesContent()}
-
-
         </View>
       )
-    }
-    return (
-      <View>
-        {this.renderUpcomingLaunchesContent()}
-      </View>
-    )
+    
   }
-
-  // renderButtonContainer() {
-  //   if (this.state.isStatusPast) {
-  //     return (
-  //       <Button
-  //         title="Show Upcoming Launches"
-  //         onPress={() => this.props.navigation.navigate('Details')}
-
-  //         // onPress={() => this.setState({ isStatusPast: false })}
-  //         buttonStyle={styles.bottomButton}
-  //         titleStyle={styles.buttonTextStyle}
-  //       />
-  //     )
-  //   }
-  //   return (
-  //     <Button
-  //       title="Show Past Launches"
-  //       onPress={() => this.setState({ isStatusPast: true })}
-  //       buttonStyle={styles.bottomButton}
-  //       titleStyle={styles.buttonTextStyle}
-  //     />
-  //   )
-  // }
 
   _renderByDate() {
     const pastLaunchSearchData = this.state.pastLaunchSearchData
@@ -263,7 +168,6 @@ class HomeScreen extends Component {
     this.setState({
       pastLaunchSearchData: sortedArray
     })
-
   }
 
   render() {
@@ -271,10 +175,7 @@ class HomeScreen extends Component {
       return (
         <View style={styles.mainContainer}>
           <View style={styles.logoContainer}>
-            <Image
-              source={require('../assets/launchify_logo.png')}
-              style={styles.logoStyle}
-            />
+           <Text>No Client</Text>
           </View>
         </View>
       );
@@ -297,9 +198,6 @@ class HomeScreen extends Component {
           <View style={styles.listContainer}>
             {this.renderMainContent()}
           </View>
-          {/* <View style={styles.buttonContainer}>
-            {this.renderButtonContainer()}
-          </View> */}
         </SafeAreaView>
       </ApolloProvider>
     )
